@@ -11,7 +11,9 @@ export class FiltroComponent implements OnInit {
 
   filtroForm: FormGroup;
 
-  constructor() {
+  constructor(
+    private peticionesService: PeticionesService
+  ) {
     this.filtroForm = new FormGroup({
       cliente: new FormControl(),
       referencia: new FormControl(),
@@ -35,9 +37,30 @@ export class FiltroComponent implements OnInit {
     let tipo = this.filtroForm.value.tipo;
     let estado = this.filtroForm.value.estado;
     console.log(this.filtroForm.value)
-    let params = "?cliente=" + cliente + "?referencia=" + referencia + "?usuario=" + usuario + "?inicio=" + inicio + "?fin=" + fin + "?tipo=" + tipo + "?estado=" + estado
+    let params = ""
+    if (cliente != null) {
+      params += "?cliente=" + cliente
+    }
+    if (referencia != null) {
+      params += "?referencia=" + referencia
+    }
+    if (usuario != null) {
+      params += "?usuario=" + usuario
+    }
+    if (inicio != null) {
+      params += "?inicio=" + inicio
+    }
+    if (fin != null) {
+      params += "?fin=" + fin
+    }
+    if (tipo != null) {
+      params += "?tipo=" + tipo
+    }
+    if (estado != null) {
+      params += "?estado=" + estado
+    }
 
-    console.log(params)
+    console.log(params);
 
   }
 }
