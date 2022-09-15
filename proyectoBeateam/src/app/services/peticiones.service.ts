@@ -39,8 +39,18 @@ export class PeticionesService {
     return lastValueFrom(this.httpClient.get<any>(this.baseUrl, httpOptions))
   }
 
+  getTareas(): Promise<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'funcion': 'getTareas',
+        'X-Auth': this.tokenEncriptado
+      })
+    }
+    return lastValueFrom(this.httpClient.get<any>(this.baseUrl, httpOptions))
+  }
 
-  getTareas(busqueda: any): Promise<any> {
+
+  getBusqueda(busqueda: any): Promise<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'funcion': 'getTareas',

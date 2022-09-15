@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { FiltroComponent } from './components/filtro/filtro.component';
 import { VistaTareasComponent } from './components/vista-tareas/vista-tareas.component';
 import { HttpClientModule } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule
 
   ],
   providers: [],

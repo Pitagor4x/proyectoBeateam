@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PeticionesService } from 'src/app/services/peticiones.service';
 
 @Component({
   selector: 'app-vista-tareas',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VistaTareasComponent implements OnInit {
 
-  constructor() { }
+  tareas: any
+  busqueda: any
 
-  ngOnInit(): void {
+
+  constructor(
+    private peticionesService: PeticionesService
+  ) { }
+
+  async ngOnInit(): Promise<void> {
+    this.tareas = await this.peticionesService.getTareas()
+    this.tareas = this.tareas.data
+    console.log(this.tareas)
+
   }
 
 }

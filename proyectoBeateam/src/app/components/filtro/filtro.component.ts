@@ -10,6 +10,8 @@ import { PeticionesService } from 'src/app/services/peticiones.service';
 export class FiltroComponent implements OnInit {
 
   filtroForm: FormGroup;
+  estados: [] | any;
+  tipos: [] | any
 
   constructor(
     private peticionesService: PeticionesService
@@ -25,7 +27,11 @@ export class FiltroComponent implements OnInit {
     }, [])
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.estados = await this.peticionesService.getEstados()
+    this.estados = this.estados.data
+    this.tipos = await this.peticionesService.getTipos()
+    this.tipos = this.tipos.data
   }
 
   getSearch() {
@@ -60,7 +66,7 @@ export class FiltroComponent implements OnInit {
       params += "?estado=" + estado
     }
 
-    console.log(params);
+    this.peticionesService.getBusqueda(params)
 
   }
 }
