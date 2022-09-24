@@ -1,1 +1,73 @@
-<p>vista-tareas works!</p>
+<table class="w-100">
+    <thead>
+        <tr>
+            <th scope="col">PRODUCTO</th>
+            <th scope="col" c></th>
+            <th scope="col">Q.</th>
+            <th scope="col" class="text-center">ESTADO</th>
+            <th scope="col">TIPO</th>
+            <th scope="col">FECHA</th>
+            <th scope="col"></th>
+            <th scope="col">CLIENTE</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="fila" *ngFor="let tarea of tareas | paginacion:page_size:page_number">
+            <td>
+                <img [src]="tarea?.logo">{{tarea?.referencia}}
+            </td>
+            <td>
+                <i [ngClass]="{'fa-circle-exclamation': tarea?.observacion !== '', 'fa-circle-info': tarea?.observacion === ''}"
+                    class="fa-solid rounded-circle" [ngbPopover]="tooltip" placement="bottom"
+                    triggers="mouseenter:mouseleave"></i>
+
+                <ng-template #tooltip>
+                    <p class="m-0">
+                        <strong>
+                            Obs. linea:
+                        </strong>
+                        <span *ngIf="tarea?.observacion !==''">
+                            {{tarea?.usuario}} - {{tarea?.observacion}}
+                        </span>
+                    </p>
+                    <p class="m-0"><strong>Pedido por:</strong> {{tarea?.alias_cliente}} </p>
+                </ng-template>
+            </td>
+            <td>
+                x{{tarea?.cantidad}}
+            </td>
+            <td>
+                <div [ngClass]="{'desconsolidada': tarea?.estado.toLowerCase() === 'desconsolidada', 'desconsolidando': tarea?.estado.toLowerCase() === 'desconsolidando', 'recogiendo': tarea?.estado.toLowerCase() === 'recogiendo','recogida': tarea?.estado.toLowerCase() === 'recogida','pendiente': tarea?.estado.toLowerCase() === 'pendiente','entregada': tarea?.estado.toLowerCase() === 'entregada', 'incidencia': tarea?.estado.toLowerCase() === 'incidencia'}"
+                    class="rounded-3 mx-auto">
+                    {{tarea?.estado}}</div>
+            </td>
+            <td>
+                <div class="tipo rounded-3">{{tarea?.tipo}}</div>
+            </td>
+            <td>{{tarea?.fecha | date:'hh:mm'}} <small>{{tarea?.fecha | date:'dd MMM YY'}}</small></td>
+            <td><small>{{tarea?.codigo_cliente}}</small></td>
+            <td>{{tarea?.alias_cliente}}</td>
+        </tr>
+    </tbody>
+</table>
+<div class="caja">
+    <nav aria-label="Page navigation example" class="d-flex justify-content-end mt-4 ">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous" (click)="paginaAnterior()">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            <li class="page-item" *ngFor="let pagina of pages_array"><a class="page-link"
+                    (click)="cambiarPagina($event)" [ngClass]="{'paginaActual': pagina === page_number }">{{pagina}}</a>
+            </li>
+            <li class=" page-item">
+                <a class="page-link" href="#" aria-label="Next" (click)="paginaSiguiente()">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

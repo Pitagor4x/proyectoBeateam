@@ -1,0 +1,88 @@
+*{
+    font-size: 0.9rem;
+}
+
+th{
+    font-size: 0.7rem;
+}
+
+.fila{
+    border-bottom: 1px solid black;
+}
+
+img{
+    width: 80px;
+    height: auto;
+}
+
+.fa-circle-info{
+    font-size: 1.2rem;
+    color: blue;
+    background-color: white;
+}
+
+.fa-circle-exclamation{
+    font-size: 1.2rem;
+    color: yellow;
+    background-color: black;
+}
+
+small{
+    font-size: 0.7rem;
+    color: grey;
+}
+
+.desconsolidada{
+    background-color:var(--primary-color);
+    width: fit-content;
+    color: white;
+    padding: 2px;
+}
+.desconsolidando{
+    background-color:var(--info-color);
+    width: fit-content;
+    color: white;
+    padding: 2px;
+}
+.recogiendo{
+    background-color: var(--warning-color);
+    width: fit-content;
+    color: black;
+    padding: 2px;
+}
+.recogida{
+    background-color: var(--dark-color);
+    width: fit-content;
+    color: white;
+    padding: 2px;
+}
+.pendiente{
+    background-color: var(--secondary-color);
+    width: fit-content;
+    color: white;
+    padding: 2px;
+}
+.entregada{
+    background-color: var(--success-color);
+    width: fit-content;
+    color: white;
+    padding: 2px;
+}
+.incidencia{
+    background-color: var(--danger-color);
+    width: fit-content;
+    color: white;
+    padding: 2px;
+}
+
+.tipo{
+    background-color: black;
+    color: white;
+    width: fit-content;
+    padding: 2px;
+}
+
+.paginaActual{
+   background-color: var(--primary-color);
+   color: white; 
+}
