@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import * as dayjs from 'dayjs';
 import * as CryptoJS from 'crypto-js';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 
 
 @Injectable({
@@ -39,25 +39,16 @@ export class PeticionesService {
     return lastValueFrom(this.httpClient.get<any>(this.baseUrl, httpOptions))
   }
 
-  getTareas(): Promise<any> {
+  getTareas(filter: any = ""): Promise<any> {
     const httpOptions = {
+      params: filter,
       headers: new HttpHeaders({
         'funcion': 'getTareas',
         'X-Auth': this.tokenEncriptado
-      })
+      }),
+
     }
     return lastValueFrom(this.httpClient.get<any>(this.baseUrl, httpOptions))
-  }
-
-
-  getBusqueda(busqueda: any): Promise<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'funcion': 'getTareas',
-        'X-Auth': this.tokenEncriptado
-      })
-    }
-    return lastValueFrom(this.httpClient.get<any>(this.baseUrl + busqueda, httpOptions))
   }
 
 

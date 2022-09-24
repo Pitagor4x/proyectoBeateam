@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms'
 import { PeticionesService } from 'src/app/services/peticiones.service';
 
@@ -9,13 +10,22 @@ import { PeticionesService } from 'src/app/services/peticiones.service';
 })
 export class FiltroComponent implements OnInit {
 
+  @Output() filtroEnviado: EventEmitter<[] | any>
+  @Output() paginaReset: EventEmitter<number | any>
+
   filtroForm: FormGroup;
-  estados: [] | any;
-  tipos: [] | any
+  estados: any = [];
+  tipos: any = [];
+  estadosEnviados: any = [];
+  fecha: any = {};
 
   constructor(
-    private peticionesService: PeticionesService
+    private peticionesService: PeticionesService,
   ) {
+
+    this.filtroEnviado = new EventEmitter<any>()
+    this.paginaReset = new EventEmitter<number | any>()
+
     this.filtroForm = new FormGroup({
       cliente: new FormControl(),
       referencia: new FormControl(),
@@ -25,6 +35,7 @@ export class FiltroComponent implements OnInit {
       tipo: new FormControl(),
       estado: new FormControl()
     }, [])
+
   }
 
   async ngOnInit(): Promise<void> {
@@ -34,39 +45,99 @@ export class FiltroComponent implements OnInit {
     this.tipos = this.tipos.data
   }
 
-  getSearch() {
-    let cliente = this.filtroForm.value.cliente;
-    let referencia = this.filtroForm.value.referencia;
-    let usuario = this.filtroForm.value.usuario;
-    let inicio = this.filtroForm.value.inicio;
-    let fin = this.filtroForm.value.fin;
-    let tipo = this.filtroForm.value.tipo;
-    let estado = this.filtroForm.value.estado;
-    console.log(this.filtroForm.value)
-    let params = ""
-    if (cliente != null) {
-      params += "?cliente=" + cliente
+  onChange(estado: string, isChecked: any) {
+    if (isChecked.target.checked) {
+      this.estadosEnviados.push(estado);
+    } else {
+      let index = this.estadosEnviados.indexOf(estado);
+      this.estadosEnviados.splice(index, 1);
     }
-    if (referencia != null) {
-      params += "?referencia=" + referencia
-    }
-    if (usuario != null) {
-      params += "?usuario=" + usuario
-    }
-    if (inicio != null) {
-      params += "?inicio=" + inicio
-    }
-    if (fin != null) {
-      params += "?fin=" + fin
-    }
-    if (tipo != null) {
-      params += "?tipo=" + tipo
-    }
-    if (estado != null) {
-      params += "?estado=" + estado
-    }
-
-    this.peticionesService.getBusqueda(params)
-
   }
+
+  async getSearch() {
+    let clienteValue = this.filtroForm.value.cliente;
+    let referenciaValue = this.filtroForm.value.referencia;
+    let usuarioValue = this.filtroForm.value.usuario;
+    let fechaValueInicio = this.filtroForm.value.inicio;
+    let fechaValueFin = this.filtroForm.value.fin;
+    let tipoValue = this.filtroForm.value.tipo;
+    let estadoValue = this.estadosEnviados;
+
+    if (this.filtroForm.value.cliente === null) {
+      clienteValue = ""
+    } else {
+      clienteValue = this.filtroForm.value.cliente
+    }
+    if (this.filtroForm.value.referencia === null) {
+      referenciaValue = ""
+    } else {
+      referenciaValue = this.filtroForm.value.referencia
+    }
+    if (this.filtroForm.value.usuario === null) {
+      usuarioValue = ""
+    } else {
+      usuarioValue = this.filtroForm.value.usuario
+    }
+    if (this.filtroForm.value.inicio === null) {
+      fechaValueInicio = ""
+    } else {
+      fechaValueInicio = this.filtroForm.value.inicio
+    }
+    if (this.filtroForm.value.fin === null) {
+      fechaValueFin = ""
+    } else {
+      fechaValueFin = this.filtroForm.value.fin
+    }
+    if (this.filtroForm.value.tipo === null) {
+      tipoValue = ""
+    } else {
+      tipoValue = this.filtroForm.value.tipo
+    }
+    if (this.estadosEnviados.length === 0) {
+      estadoValue = []
+    } else {
+      this.estadosEnviados = estadoValue
+    }
+
+
+    let params = new HttpParams()
+      .set('cliente', clienteValue)
+      .set('referencia', referenciaValue)
+      .set('usuario', usuarioValue)
+      .set('fecha[inicio]', fechaValueInicio)
+      .set('fecha[fin]', fechaValueFin)
+      .set('tipo', tipoValue)
+    this.estadosEnviados.forEach((estado: any) => {
+      params = params.append('estado[]', estado)
+    });
+
+    let tareasFiltro = await this.peticionesService.getTareas(params)
+    this.filtroEnviado.emit(tareasFiltro.data)
+    this.paginaReset.emit(1)
+  }
+
+  resetCampo(campo: string) {
+    switch (campo) {
+      case 'cliente':
+        this.filtroForm.patchValue({ cliente: '' });
+        break;
+      case 'referencia':
+        this.filtroForm.patchValue({ referencia: '' });
+        break;
+      case 'usuario':
+        this.filtroForm.patchValue({ usuario: '' });
+        break;
+      case 'inicio':
+        this.filtroForm.patchValue({ inicio: '', fin: '' });
+        break;
+      case 'tipo':
+        this.filtroForm.patchValue({ tipo: '' });
+        break;
+      default:
+        break;
+    }
+  }
+
 }
+
+

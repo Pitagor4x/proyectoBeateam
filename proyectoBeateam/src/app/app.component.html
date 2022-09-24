@@ -1,4 +1,7 @@
 <div class="row g-4">
-    <app-filtro class="col-2 p-3"></app-filtro>
-    <app-vista-tareas class="col-10 p-3"></app-vista-tareas>
+    <app-filtro class="col-3 p-3" (filtroEnviado)="filtroGuardado($event)" (paginaReset)="paginaStart($event)">
+    </app-filtro>
+
+    <app-vista-tareas class="col-9 p-3" [actualizarVista]="tareasFiltradas" [paginaReset]="pagina">
+    </app-vista-tareas>
 </div>
